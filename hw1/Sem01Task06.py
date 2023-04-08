@@ -18,7 +18,7 @@ def CountSumNumbers(inNum):  # функция подсчета суммы циф
 ticketNum = input("Введите 6-ти значный номер билета:")
 
 # проверяем ввел ли пользователь 6-ти значное число
-while not (str.isnumeric(ticketNum) and len(ticketNum) == 6):
+while not (ticketNum.isnumeric() and len(ticketNum) == 6):
     # если нет, то сообщаем об ошибке и просим ввести номер заново
     print("Ошибка ввода!")
     ticketNum = input("Введите 6-ти значный номер билета:")
