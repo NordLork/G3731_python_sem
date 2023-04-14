@@ -17,7 +17,7 @@ answer.add(elements[0])  # записываем в ответ 0й элемент
 score = abs(elements[0] - findMe)
 
 for i in elements:
-    if abs(i-findMe) < score:  # если нашли элемент ближе, чем ранее записанный
+    if abs(i - findMe) < score:  # если нашли элемент ближе, чем ранее записанный
         score = abs(i-findMe)  # расчитываем новую разность
         answer.clear()  # очищаем ранее записанные числа
         answer.add(i)  # дописываем новое значение
