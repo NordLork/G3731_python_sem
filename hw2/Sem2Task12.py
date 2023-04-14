@@ -13,12 +13,18 @@ P = int(input("Введите произведение чисел X и Y: "))
 # P = x * y
 y = int((S + ((-S) ** 2 - 4 * P) ** 0.5) / 2)
 x = int((S - ((-S) ** 2 - 4 * P) ** 0.5) / 2)
-print(x, y)
+print(f'Первое число = "{x}", второе число = "{y}"')
 
 
-# x = int(input())
-# y = int(input())
+# x = int(input("Введите сумму чисел X и Y: "))
+# y = int(input("Введите произведение чисел X и Y: "))
 # for i in range(x):
 #   for j in range(y):
 #     if x == i + j and y == i * j:
-#       print(i, j)
+#       print(f'Первое число = "{i}", второе число = "{j}"')
+#       break
+#   else:
+#     continue
+#   break
+# else:
+#   print("Решения с такими условиями не существует.")
