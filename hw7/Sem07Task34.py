@@ -14,7 +14,7 @@
 
 def CheckRythm(song):
     phrases = song.lower().split() # разбиваем кричалку на фразы
-    f = lambda x: sum(1 for i in x if i in 'аеёиоуыэюя') # лямбда функция подсчета гласных
+    f = lambda x: sum(i in 'аеёиоуыэюя' for i in x) # лямбда функция подсчета гласных
     tmp = f(phrases[0]) # считаем количество слогов в первой фразе
     if all([f(i) == tmp for i in phrases]): # если количество слогов во всех фразах, равно количеству слогов в первоф фразе, то:
         return "Парам пам-пам"
