@@ -71,3 +71,7 @@ if same_by(lambda x: x % 2, values):
   print('same')
 else:
   print('different')
+
+
+# power = lambda a, b: a * power(a, b - 1) if b else 1
+# print(power(2, 4))
