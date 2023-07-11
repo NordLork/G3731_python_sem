@@ -1,65 +1,124 @@
-# Задача 38: Дополнить телефонный справочник возможностью изменения и удаления данных.
-# Пользователь также может ввести имя или фамилию, и Вы должны реализовать функционал
+# Задача 38: Дополнить телефонный справочник возможностью изменения и удаления данных. 
+# Пользователь также может ввести имя или фамилию, и Вы должны реализовать функционал 
 # для изменения и удаления данных.
 
-# изменения в базе данных (добавление, поиск, удаление, замена)
 
-import file as f
+import csv
 
-
-def add_abonent(file_type):
-    """
-    добавление абонента
-    :param file_type:
-    :return: save new abonent in file
-    """
-    new_abonent = []
-    new_abonent.append(input('Введите фамилию абонента: '))
-    new_abonent.append(input('Введите имя абонента: '))
-    new_abonent.append(input('Введите телефон абонента: '))
-    new_abonent.append(input('Введите описание абонента: '))
-    phone_book = f.read_file(file_type)
-    phone_book.append(new_abonent)
-    f.save_file(file_type, phone_book)
+def display_all_records():
+    for row in reader:
+        print(f"Фамилия: {row[0]}\nИмя: {row[1]}\nНомер телефона: {row[2]}\nКомментарий: {row[3]}\n")
 
 
-def find_in_file(find_text):
-    """
-    поиск в файле. ищет в справочнике, полученном из файла, возвращает список найденных элементов
-    :param file_type:
-    :return: [[],[]]
-    """
-    # search_info = input('Введите элемент (текстом): ').lower()
-    search_info = find_text.lower()
-    phone_book = f.read_file()
-    finded_info = []
-    # если в элементе справочника есть искомая строка, записываем его в список найденных элементов
-    for element in phone_book:
-        if search_info in ''.join(element).lower():
-            finded_info.append(element)
-    return finded_info
+def find_last_name(reader):
+    last_name = input("Введите фамилию: ")
+    for elem in filter(lambda x: x[0] == last_name, reader):
+        print(f"Фамилия: {elem[0]}\nИмя: {elem[1]}\nНомер телефона: {elem[2]}\nКомментарий: {elem[3]}\n")
 
 
-def remove_element(del_info):
-    """
-    удаление информации из справочника
-    :param file_type:
-    :return:перезапись телефонной книги без удалённого абонента
-    """
-    remove_info = find_in_file(del_info)
-    if len(remove_info) == 0:
-        # print(f'Не могу удалить {len(remove_info)} абонента(ов)! ')
-        return False
-    else:
-        new_phone_book = []
-        phone_book = f.read_file()
-        # ищем вхождение по каждому абоненту
-        for element in phone_book:
-            add = True
-            if element[0] == remove_info[0][0] and element[1] == remove_info[0][1] and element[2] == remove_info[0][
-                2] and element[3] == remove_info[0][3]:
-                add = False
-            if add:
-                new_phone_book.append(element)
-        f.save_file(new_phone_book)
-        return True
+def find_phone_number(reader):
+    phone = input("Введите номер телефона: ")
+    for elem in filter(lambda x: x[2] == phone, reader):
+        print(f"Фамилия: {elem[0]}\nИмя: {elem[1]}\nНомер телефона: {elem[2]}\nКомментарий: {elem[3]}\n")
+
+def add_abonent():
+    with open('phonebook.csv', "a", encoding="utf-8", newline="") as out_file:
+        info = input("Введите данные абонента через запятую: ").split(", ")
+        csv.writer(out_file).writerow(info)
+        print(f"Данные абонента {info[1]} {info[0]} записаны")
+
+def del_abonent():
+    with open('phonebook.csv', "r+", encoding="utf-8",) as del_file:
+        info = input("Введите фамилию и номер телефона абонента для удаления (через запятую): ").split(", ")
+        data = list(csv.reader(del_file))
+        user_info = list(filter(lambda x: x[0] == info[0] and x[2] == info[1], data))
+        if len(user_info) > 0:
+            data.remove(user_info[0])
+            del_file.seek(0)
+            csv.writer(del_file).writerows(data)
+            del_file.truncate()
+            print(f"Пользователь с фамилией {info[0]} и телефоном {info[1]} удален.")
+        else:
+            print(f"Пользователь с фамилией {info[0]} и телефоном {info[1]} не найден.")
+
+def change_user_info():
+    with open('phonebook.csv', "r+", encoding="utf-8",) as change_file:
+        info = input("Введите фамилию и номер телефона абонента для изменения (через запятую): ").split(", ")
+        data = list(csv.reader(change_file))
+        user_info = list(filter(lambda x: x[0] == info[0] and x[2] == info[1], data))
+        if len(user_info) > 0:
+            new_user_info = input("Обновленные данные пользователя "
+                                  "(Фамилия, имя, телефон и комментарий через запятую): ").split(", ")
+            data.remove(user_info[0])
+            file.seek(0)
+            writer = csv.writer(change_file)
+            writer.writerows(data)
+            writer.writerow(new_user_info)
+            print("Данные пользователя изменены")
+        else:
+            print(f"Пользователь с фамилией {info[0]} и телефоном {info[1]} не найден.")
+
+
+#file = open('phonebook.csv', "r", encoding="utf-8") 
+#reader = csv.reader(file)
+
+# while(True):
+#     
+#     print("\nВыберете действие:\n1-Вывод всей книги\n2 - Поиск по фамилии\n3 - Поиск по номеру телефона\n4 - Добавить запись\n5 - Удалить запись\n6 - Изменить запись\n7 - Выход")
+#     sel=input()
+#     if sel == "1":
+#         display_all_records()
+
+#     elif sel == "2":
+#         find_last_name(reader)
+            
+#     elif sel == "3":
+#         find_phone_number(reader)
+
+#     elif sel == "4":
+#         add_abonent()
+
+#     elif sel == "5":
+#         del_abonent()
+            
+#     elif sel == "6":
+#         change_user_info()
+#     elif sel == "7":
+#         break
+
+print("\nВыберете действие:\n1-Вывод всей книги\n2 - Поиск по фамилии\n3 - Поиск по номеру телефона\n4 - Добавить запись\n5 - Удалить запись\n6 - Изменить запись\n7 - Выход")
+for elem in iter(input, "7"):
+   
+    with open('phonebook.csv', "r", encoding="utf-8") as file:
+        reader = csv.reader(file)
+
+        if elem == "1":
+            display_all_records()
+
+        elif elem == "2":
+            find_last_name(reader)
+            
+        elif elem == "3":
+            find_phone_number(reader)
+
+        elif elem == "4":
+            add_abonent()
+
+        elif elem == "5":
+            del_abonent()
+            
+        elif elem == "6":
+            change_user_info()
+
+
+def read_csv(filename: str) -> list:
+    data = []
+    fields = ["Фамилия", "Имя", "Телефон", "Описание"]
+    with open(filename, 'r', encoding='utf-8') as fin:
+        for line in fin:
+            record = dict(zip(fields, line.strip().split(' ')))
+            data.append(record)
+
+
+
+    return data
